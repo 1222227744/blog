@@ -1,46 +1,44 @@
 ---
-title: Simple Guides for Fuwari
-published: 2024-04-01
-description: "How to use this blog template."
-image: "./cover.jpeg"
-tags: ["Fuwari", "Blogging", "Customization"]
-category: Guides
+title: 这是一个简单的小引导（？）
+published: 2026-03-020
+description: "点进来更神！"
+image: "./cover.jpg"
+tags: ["测试向", "博客", "分享"]
+category: 指引
 draft: false
 ---
+> Cover image source: [Source](https://www.miyoushe.com/zzz/article/69603606)
 
-> Cover image source: [Source](https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/208fc754-890d-4adb-9753-2c963332675d/width=2048/01651-1456859105-(colour_1.5),girl,_Blue,yellow,green,cyan,purple,red,pink,_best,8k,UHD,masterpiece,male%20focus,%201boy,gloves,%20ponytail,%20long%20hair,.jpeg)
-
-This blog template is built with [Astro](https://astro.build/). For the things that are not mentioned in this guide, you may find the answers in the [Astro Docs](https://docs.astro.build/).
+这个博客模板是我从[Github](github.com)上clone下来的，[原作者在此](https://github.com/saicaca)
 
 ## Front-matter of Posts
 
 ```yaml
 ---
-title: My First Blog Post
-published: 2023-09-09
-description: This is the first post of my new Astro blog.
+title: 初次见面
+published: 2026-03-20
+description: 这是一个用于测试的Demo
 image: ./cover.jpg
-tags: [Foo, Bar]
-category: Front-end
+tags: [菜, 爱玩]
+category: 引导
 draft: false
 ---
 ```
 
+
 | Attribute     | Description                                                                                                                                                                                                 |
-|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `title`       | The title of the post.                                                                                                                                                                                      |
 | `published`   | The date the post was published.                                                                                                                                                                            |
 | `description` | A short description of the post. Displayed on index page.                                                                                                                                                   |
 | `image`       | The cover image path of the post.<br/>1. Start with `http://` or `https://`: Use web image<br/>2. Start with `/`: For image in `public` dir<br/>3. With none of the prefixes: Relative to the markdown file |
 | `tags`        | The tags of the post.                                                                                                                                                                                       |
 | `category`    | The category of the post.                                                                                                                                                                                   |
-| `draft`        | If this post is still a draft, which won't be displayed.                                                                                                                                                    |
+| `draft`       | If this post is still a draft, which won't be displayed.                                                                                                                                                    |
 
-## Where to Place the Post Files
+## 项目目录
 
-
-
-Your post files should be placed in `src/content/posts/` directory. You can also create sub-directories to better organize your posts and assets.
+博客文件应该放在 `src/content/posts/` 文件夹下，或者也可以在此创建子文件夹来组织管理博客
 
 ```
 src/content/posts/
