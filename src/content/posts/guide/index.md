@@ -1,6 +1,6 @@
 ---
 title: 这是一个简单的小引导（？）
-published: 2026-03-020
+published: 2026-03-20
 description: "点进来更神！"
 image: "./cover.jpg"
 tags: ["测试向", "博客", "分享"]
