@@ -3,9 +3,11 @@ import ArchivePanel from "@components/ArchivePanel.svelte";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { getSortedPostsList } from "../utils/content-utils";
+import { getSortedPostsList, getAllTags, getAllCategories } from "../utils/content-utils";
 
 const sortedPostsList = await getSortedPostsList();
+const allTags = await getAllTags();
+const allCategories = await getAllCategories();
 
 // 修复类型不兼容问题：把 category: null → undefined
 const fixedPosts = sortedPostsList.map(post => ({
@@ -18,5 +20,10 @@ const fixedPosts = sortedPostsList.map(post => ({
 ---
 
 <MainGridLayout title={i18n(I18nKey.archive)}>
-    <ArchivePanel sortedPosts={fixedPosts} client:only></ArchivePanel>
+    <ArchivePanel 
+      sortedPosts={fixedPosts} 
+      tags={allTags} 
+      categories={allCategories} 
+      client:load>
+    </ArchivePanel>
 </MainGridLayout>
