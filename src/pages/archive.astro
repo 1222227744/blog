@@ -3,19 +3,25 @@ import ArchivePanel from "@components/ArchivePanel.svelte";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { getSortedPostsList, getAllTags, getAllCategories } from "../utils/content-utils";
+import { getSortedPostsList } from "../utils/content-utils";
 
 const sortedPostsList = await getSortedPostsList();
-const allTags = await getAllTags();
-const allCategories = await getAllCategories();
 
-// 修复类型不兼容问题：把 category: null → undefined
-const fixedPosts = sortedPostsList.map(post => ({
-  ...post,
-  data: {
-    ...post.data,
-    category: post.data.category ?? undefined
-  }
+// 生成所有标签和分类
+const allTags = Array.from(
+	new Set(sortedPostsList.flatMap((post) => post.data.tags || [])),
+);
+const allCategories = Array.from(
+	new Set(sortedPostsList.map((post) => post.data.category).filter(Boolean)),
+);
+
+// 修复类型不兼容：null → undefined
+const fixedPosts = sortedPostsList.map((post) => ({
+	...post,
+	data: {
+		...post.data,
+		category: post.data.category ?? undefined,
+	},
 }));
 ---
 
@@ -23,7 +29,6 @@ const fixedPosts = sortedPostsList.map(post => ({
     <ArchivePanel 
       sortedPosts={fixedPosts} 
       tags={allTags} 
-      categories={allCategories} 
-      client:load>
+      categories={allCategories}>
     </ArchivePanel>
 </MainGridLayout>
