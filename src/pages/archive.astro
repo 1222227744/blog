@@ -6,9 +6,17 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getSortedPostsList } from "../utils/content-utils";
 
 const sortedPostsList = await getSortedPostsList();
+
+// 修复类型不兼容问题：把 category: null → undefined
+const fixedPosts = sortedPostsList.map(post => ({
+  ...post,
+  data: {
+    ...post.data,
+    category: post.data.category ?? undefined
+  }
+}));
 ---
 
 <MainGridLayout title={i18n(I18nKey.archive)}>
-    <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte"></ArchivePanel>
+    <ArchivePanel sortedPosts={fixedPosts} client:only></ArchivePanel>
 </MainGridLayout>
-
