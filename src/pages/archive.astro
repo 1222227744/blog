@@ -12,7 +12,11 @@ const allTags = Array.from(
 	new Set(sortedPostsList.flatMap((post) => post.data.tags || [])),
 );
 const allCategories = Array.from(
-	new Set(sortedPostsList.map((post) => post.data.category).filter(Boolean)),
+	new Set(
+		sortedPostsList
+			.map((post) => post.data.category)
+			.filter((category): category is string => typeof category === "string"),
+	),
 );
 
 // 修复类型不兼容：null → undefined
@@ -29,6 +33,7 @@ const fixedPosts = sortedPostsList.map((post) => ({
     <ArchivePanel 
       sortedPosts={fixedPosts} 
       tags={allTags} 
-      categories={allCategories}>
+      categories={allCategories}
+      client:only="svelte">
     </ArchivePanel>
 </MainGridLayout>
