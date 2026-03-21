@@ -1,86 +1,80 @@
-# 🍥Fuwari
+# Two 的博客仓库说明（基于 Fuwari）
 
-基于 [Astro](https://astro.build) 开发的静态博客模板。
+这是我自己的博客仓库，基于 [saicaca/fuwari](https://github.com/saicaca/fuwari) 二次改造。
 
-[**🖥️在线预览（Vercel）**](https://fuwari.vercel.app)
+本文件用于说明**我的博客项目怎么维护和发布**，不是原模板的官方 README。
 
-![Preview Image](https://raw.githubusercontent.com/saicaca/resource/main/fuwari/home.png)
+## 你在这个仓库里最常做的事
 
-## ✨ 功能特性
+1. 改站点信息与个人资料：`src/config.ts`
+2. 写新文章：`src/content/posts/`
+3. 调整部署参数：`astro.config.mjs`
+4. 推送到 GitHub 后自动部署：`.github/workflows/deploy.yml`
 
-- [x] 基于 Astro 和 Tailwind CSS 开发
-- [x] 流畅的动画和页面过渡
-- [x] 亮色 / 暗色模式
-- [x] 自定义主题色和横幅图片
-- [x] 响应式设计
-- [ ] 评论
-- [x] 搜索
-- [x] 文内目录
+## 快速开始
 
-## 👀 要求
-
-- Node.js <= 22
-- pnpm <= 9
-
-## 🚀 使用方法 1
-
-使用 [create-fuwari](https://github.com/L4Ph/create-fuwari) 在本地初始化项目。
-
-```sh
-# npm
-npm create fuwari@latest
-
-# yarn
-yarn create fuwari
-
-# pnpm
-pnpm create fuwari@latest
-
-# bun
-bun create fuwari@latest
-
-# deno
-deno run -A npm:create-fuwari@latest
+```bash
+pnpm install
+pnpm dev
 ```
 
-1. 通过配置文件 `src/config.ts` 自定义博客
-2. 执行 `pnpm new-post <filename>` 创建新文章，并在 `src/content/posts/` 目录中编辑
-3. 参考[官方指南](https://docs.astro.build/zh-cn/guides/deploy/)将博客部署至 Vercel, Netlify, GitHub Pages 等；部署前需编辑 `astro.config.mjs` 中的站点设置。
+类型检查与构建：
 
-## 🚀 使用方法 2
+```bash
+pnpm astro check
+pnpm type-check
+pnpm run build
+```
 
-1. 使用此模板[生成新仓库](https://github.com/saicaca/fuwari/generate)或 Fork 此仓库
-2. 进行本地开发，Clone 新的仓库，执行 `pnpm install` 和 `pnpm add sharp` 以安装依赖  
-   - 若未安装 [pnpm](https://pnpm.io)，执行 `npm install -g pnpm`
-3. 通过配置文件 `src/config.ts` 自定义博客
-4. 执行 `pnpm new-post <filename>` 创建新文章，并在 `src/content/posts/` 目录中编辑
-5. 参考[官方指南](https://docs.astro.build/zh-cn/guides/deploy/)将博客部署至 Vercel, Netlify, GitHub Pages 等；部署前需编辑 `astro.config.mjs` 中的站点设置。
+## 关键配置文件
 
-## ⚙️ 文章 Frontmatter
+- 站点标题/副标题/主题/导航/头像/社交链接：`src/config.ts`
+- `site` 与 `base`（影响 GitHub Pages 路径）：`astro.config.mjs`
+- 文章 Frontmatter 校验：`src/content/config.ts`
+- 新建文章脚本：`scripts/new-post.js`
+
+## 新建并发布文章
+
+```bash
+pnpm new-post your-post-name
+```
+
+然后编辑 `src/content/posts/your-post-name.md`（或目录型文章的 `index.md`）。
+
+Frontmatter 示例：
 
 ```yaml
 ---
-title: My First Blog Post
-published: 2023-09-09
-description: This is the first post of my new Astro blog.
-image: ./cover.jpg
-tags: [Foo, Bar]
-category: Front-end
+title: 我的新文章
+published: 2026-03-22
+description: 一句话简介
+image: ""
+tags: [学习, 笔记]
+category: 数学
 draft: false
-lang: jp      # 仅当文章语言与 `config.ts` 中的网站语言不同时需要设置
+lang: zh_CN
 ---
 ```
 
-## 🧞 指令
+发布流程：
 
-下列指令均需要在项目根目录执行：
+1. 本地检查：`pnpm astro check && pnpm run build`
+2. 提交代码并推送到 `main`
+3. 等待 GitHub Actions 自动部署完成
 
-| Command                           | Action                            |
-|:----------------------------------|:----------------------------------|
-| `pnpm install` 并 `pnpm add sharp` | 安装依赖                              |
-| `pnpm dev`                        | 在 `localhost:4321` 启动本地开发服务器      |
-| `pnpm build`                      | 构建网站至 `./dist/`                   |
-| `pnpm preview`                    | 本地预览已构建的网站                        |
-| `pnpm new-post <filename>`        | 创建新文章                             |
-| `pnpm astro ...`                  | 执行 `astro add`, `astro check` 等指令 |
-| `pnpm astro --help`               | 显示 Astro CLI 帮助                   |
+## GitHub Pages 注意事项
+
+1. 仓库 Settings -> Pages -> Source 必须选 `GitHub Actions`
+2. `astro.config.mjs` 的 `site`/`base` 要和你的实际域名路径一致
+3. 绑定自定义域名后通常把 `base` 设为 `/`
+
+## 完整配置教程
+
+请看我写的详细文档：
+
+- [CONFIG_GUIDE.zh-CN.md](./CONFIG_GUIDE.zh-CN.md)
+
+## 致谢
+
+- 模板来源：[saicaca/fuwari](https://github.com/saicaca/fuwari)
+- 本仓库是个人博客落地版本，包含我的内容与部署配置

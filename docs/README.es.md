@@ -1,85 +1,58 @@
-# 🍥Fuwari
+# Repositorio del blog de Two (basado en Fuwari)
 
-Un tema estático para blogs construido con [Astro](https://astro.build).
+Este repositorio es mi blog personal, adaptado desde [saicaca/fuwari](https://github.com/saicaca/fuwari).  
+Este README describe **mi proyecto ya personalizado**, no el template original.
 
-[**🖥️ Demostración en Vivo (Vercel)**](https://fuwari.vercel.app)
+## Archivos principales
 
-![Imagen de Vista Previa](https://raw.githubusercontent.com/saicaca/resource/main/fuwari/home.png)
+1. Configuración del sitio/perfil: `src/config.ts`
+2. Artículos: `src/content/posts/`
+3. Configuración de despliegue: `astro.config.mjs`
+4. Flujo de GitHub Pages: `.github/workflows/deploy.yml`
 
-## ✨ Características
+## Inicio rápido
 
-- [x] Construido con [Astro](https://astro.build) y [Tailwind CSS](https://tailwindcss.com)
-- [x] Animaciones suaves y transiciones de página
-- [x] Modo claro / oscuro
-- [x] Colores del tema y banner personalizables
-- [x] Diseño responsivo
-- [ ] Comentarios
-- [x] Buscador
-- [x] TOC (Tabla de Contenidos)
-
-## 👀 requiere
-
-- Node.js <= 22
-- pnpm <= 9
-
-## 🚀 Cómo Usar 1
-
-Inicializa el proyecto localmente usando [create-fuwari](https://github.com/L4Ph/create-fuwari).
-
-```sh
-# npm
-npm create fuwari@latest.
-
-# yarn
-yarn create fuwari.
-
-# pnpm
-pnpm create fuwari@latest
-
-# bun
-bun create fuwari@latest
-
-# deno
-deno run -A npm:create-fuwari@latest
+```bash
+pnpm install
+pnpm dev
 ```
 
-1. Edita el archivo de configuración `src/config.ts` para personalizar tu blog.
-2. Ejecuta `pnpm new-post <nombre-de-archivo>` para crear una nueva entrada y edítala en `src/content/posts/`.
-3. Despliega tu blog en Vercel, Netlify, GitHub Pages, etc., siguiendo [las guías](https://docs.astro.build/en/guides/deploy/). Necesitas editar la configuración del sitio en `astro.config.mjs` antes del despliegue.
+Comprobación y build:
 
-## 🚀 Cómo Usar 2
+```bash
+pnpm astro check
+pnpm type-check
+pnpm run build
+```
 
-1. [Genera un nuevo repositorio](https://github.com/saicaca/fuwari/generate) desde esta plantilla o haz un fork de este repositorio.
-2. Para editar tu blog localmente, clona tu repositorio, ejecuta `pnpm install` y `pnpm add sharp` para instalar las dependencias.
-   - Instala [pnpm](https://pnpm.io) `npm install -g pnpm` si aún no lo tienes.
-3. Edita el archivo de configuración `src/config.ts` para personalizar tu blog.
-4. Ejecuta `pnpm new-post <nombre-de-archivo>` para crear una nueva entrada y edítala en `src/content/posts/`.
-5. Despliega tu blog en Vercel, Netlify, GitHub Pages, etc., siguiendo [las guías](https://docs.astro.build/en/guides/deploy/). Necesitas editar la configuración del sitio en `astro.config.mjs` antes del despliegue.
+## Crear una nueva entrada
 
-## ⚙️ Cabecera de las Entradas
+```bash
+pnpm new-post your-post-name
+```
+
+Ejemplo de Frontmatter:
 
 ```yaml
 ---
-title: Mi Primer Post en el Blog
-published: 2023-09-09
-description: Esta es la primera entrada de mi nuevo blog con Astro.
-image: /images/cover.jpg
-tags: [Foo, Bar]
-category: Front-end
+title: Mi nueva entrada
+published: 2026-03-22
+description: Resumen corto
+image: ""
+tags: [notas, matematicas]
+category: Estudio
 draft: false
+lang: zh_CN
 ---
 ```
 
-## 🧞 Comandos
+## Publicación
 
-Todos los comandos se ejecutan desde la raíz del proyecto, desde una terminal:
+1. Ejecuta: `pnpm astro check && pnpm run build`
+2. Sube cambios a `main`
+3. Espera a que termine GitHub Actions
 
-| Comando                             | Acción                                            |
-|:------------------------------------|:--------------------------------------------------|
-| `pnpm install` y `pnpm add sharp`   | Instala las dependencias                          |
-| `pnpm dev`                          | Inicia el servidor de desarrollo local en `localhost:4321` |
-| `pnpm build`                        | Compila tu web para producción en `./dist/`     |
-| `pnpm preview`                      | Previsualiza la web localmente, antes del despliegue |
-| `pnpm new-post <nombre-de-archivo>` | Crea una nueva entrada                            |
-| `pnpm astro ...`                    | Ejecuta comandos CLI como `astro add`, `astro check` |
-| `pnpm astro --help`                 | Obtén ayuda para usar el CLI de Astro             |
+## Créditos
+
+- Plantilla original: [saicaca/fuwari](https://github.com/saicaca/fuwari)
+- Este repo contiene mis ajustes de contenido, perfil y despliegue

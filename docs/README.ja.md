@@ -1,85 +1,58 @@
-# 🍥Fuwari
+# Two のブログリポジトリ（Fuwari ベース）
 
-[Astro](https://astro.build) で構築された静的ブログテンプレート
+このリポジトリは、[saicaca/fuwari](https://github.com/saicaca/fuwari) をベースにした **私用ブログ** です。  
+この README はテンプレート本家ではなく、私の運用用ドキュメントです。
 
-[**🖥️ライブデモ (Vercel)**](https://fuwari.vercel.app)
+## よく編集する場所
 
-![Preview Image](https://raw.githubusercontent.com/saicaca/resource/main/fuwari/home.png)
+1. サイト情報とプロフィール: `src/config.ts`
+2. 記事: `src/content/posts/`
+3. デプロイ設定: `astro.config.mjs`
+4. GitHub Pages ワークフロー: `.github/workflows/deploy.yml`
 
-## ✨ 特徴
+## クイックスタート
 
-- [x] [Astro](https://astro.build) 及び [Tailwind CSS](https://tailwindcss.com) で構築
-- [x] スムーズなアニメーションとページ遷移
-- [x] ライト/ダークテーマ対応
-- [x] カスタマイズ可能なテーマカラーとバナー
-- [x] レスポンシブデザイン
-- [ ] コメント機能
-- [x] 検索機能
-- [x] 目次
-
-## 👀 以下が必要
-
-- Node.js <= 22
-- pnpm <= 9
-
-## 🚀 使用方法 1
-
-[create-fuwari](https://github.com/L4Ph/create-fuwari)を使用して、ローカルにプロジェクトを初期化します。
-
-```sh
-# npm
-npm create fuwari@latest
-
-# yarn
-yarn create fuwari
-
-# pnpm
-pnpm create fuwari@latest
-
-# bun
-bun create fuwari@latest
-
-# deno
-deno run -A npm:create-fuwari@latest
+```bash
+pnpm install
+pnpm dev
 ```
 
-1. `src/config.ts` ファイルを編集する事でブログを自分好みにカスタマイズ出来ます。
-2. `pnpm new-post <filename>` で新しい記事を作成し、`src/content/posts/`.フォルダ内で編集します。
-3. 作成したブログをVercel、Netlify、GitHub Pagesなどにデプロイするには[ガイド](https://docs.astro.build/ja/guides/deploy/)に従って下さい。加えて、別途デプロイを行う前に `astro.config.mjs` を編集してサイト構成を変更する必要があります。
+チェックとビルド:
 
-## 🚀 使用方法 2
+```bash
+pnpm astro check
+pnpm type-check
+pnpm run build
+```
 
-1. [テンプレート](https://github.com/saicaca/fuwari/generate)から新しいリポジトリを作成するかCloneをします。
-2. ブログをローカルで編集するには、リポジトリをクローンした後、`pnpm install` と `pnpm add sharp` を実行して依存関係をインストールします。  
-   - [pnpm](https://pnpm.io) がインストールされていない場合は `npm install -g pnpm` で導入可能です。
-3. `src/config.ts` ファイルを編集する事でブログを自分好みにカスタマイズ出来ます。
-4. `pnpm new-post <filename>` で新しい記事を作成し、`src/content/posts/`.フォルダ内で編集します。
-5. 作成したブログをVercel、Netlify、GitHub Pagesなどにデプロイするには[ガイド](https://docs.astro.build/ja/guides/deploy/)に従って下さい。加えて、別途デプロイを行う前に `astro.config.mjs` を編集してサイト構成を変更する必要があります。
+## 新規記事の作成
 
-## ⚙️ 記事のフロントマター
+```bash
+pnpm new-post your-post-name
+```
+
+Frontmatter 例:
 
 ```yaml
 ---
-title: My First Blog Post
-published: 2023-09-09
-description: This is the first post of my new Astro blog.
-image: /images/cover.jpg
-tags: [Foo, Bar]
-category: Front-end
+title: 新しい記事
+published: 2026-03-22
+description: 要約
+image: ""
+tags: [note, math]
+category: Study
 draft: false
+lang: zh_CN
 ---
 ```
 
-## 🧞 コマンド
+## 公開手順
 
-すべてのコマンドは、ターミナルでプロジェクトのルートから実行する必要があります:
+1. `pnpm astro check && pnpm run build`
+2. `main` ブランチへ push
+3. GitHub Actions の完了を確認
 
-| Command                             | Action                                      |
-|:------------------------------------|:--------------------------------------------|
-| `pnpm install` AND `pnpm add sharp` | 依存関係のインストール                                 |
-| `pnpm dev`                          | `localhost:4321` で開発用ローカルサーバーを起動            |
-| `pnpm build`                        | `./dist/` にビルド内容を出力                         |
-| `pnpm preview`                      | デプロイ前の内容をローカルでプレビュー                         |
-| `pnpm new-post <filename>`          | 新しい投稿を作成                                    |
-| `pnpm astro ...`                    | `astro add`, `astro check` の様なコマンドを実行する際に使用 |
-| `pnpm astro --help`                 | Astro CLIのヘルプを表示                            |
+## 備考
+
+- 本家テンプレート: [saicaca/fuwari](https://github.com/saicaca/fuwari)
+- このリポジトリは個人用に構成・文章を変更しています

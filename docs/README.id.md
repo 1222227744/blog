@@ -1,106 +1,58 @@
-# 🍥 Fuwari
+# Repositori blog Two (berbasis Fuwari)
 
-Template blog statis yang dibangun dengan [Astro](https://astro.build).
+Repositori ini adalah blog pribadi saya yang dikustom dari [saicaca/fuwari](https://github.com/saicaca/fuwari).  
+README ini menjelaskan versi blog saya sendiri, bukan dokumentasi template asli.
 
-[**🖥️ Demo Langsung (Vercel)**](https://fuwari.vercel.app)
+## File yang paling sering diubah
 
-![Gambar Pratinjau](https://raw.githubusercontent.com/saicaca/resource/main/fuwari/home.png)
+1. Konfigurasi site/profil: `src/config.ts`
+2. Konten artikel: `src/content/posts/`
+3. Konfigurasi deploy: `astro.config.mjs`
+4. Workflow GitHub Pages: `.github/workflows/deploy.yml`
 
-🌏 README dalam
-[**中文**](https://github.com/saicaca/fuwari/blob/main/docs/README.zh-CN.md) /
-[**日本語**](https://github.com/saicaca/fuwari/blob/main/docs/README.ja.md) /
-[**한국어**](https://github.com/saicaca/fuwari/blob/main/docs/README.ko.md) /
-[**Español**](https://github.com/saicaca/fuwari/blob/main/docs/README.es.md) /
-[**ไทย**](https://github.com/saicaca/fuwari/blob/main/docs/README.th.md) /
-[**Tiếng Việt**](https://github.com/saicaca/fuwari/blob/main/docs/README.vi.md) /
-**Bahasa Indonesia (ini)** (Disediakan oleh komunitas, mungkin tidak selalu paling mutakhir)
+## Mulai cepat
 
-## ✨ Fitur
+```bash
+pnpm install
+pnpm dev
+```
 
-- [x] Dibangun dengan [Astro](https://astro.build) dan [Tailwind CSS](https://tailwindcss.com)
-- [x] Animasi dan transisi halaman yang halus
-- [x] Mode terang / gelap
-- [x] Warna tema & banner yang bisa dikustomisasi
-- [x] Desain responsif
-- [x] Fitur pencarian dengan [Pagefind](https://pagefind.app/)
-- [x] [Fitur markdown tambahan](#-markdown-sintaks-ekstensi)
-- [x] Daftar isi (Table of Contents)
-- [x] RSS feed
+Cek dan build:
 
-## 🚀 Memulai
+```bash
+pnpm astro check
+pnpm type-check
+pnpm run build
+```
 
-1. Buat repositori blog kamu:
-    - [Generate repositori baru](https://github.com/saicaca/fuwari/generate) dari template ini atau fork repositori ini.
-    - Atau jalankan salah satu perintah berikut:
-       ```sh
-        # npm
-        npm create fuwari@latest.
+## Membuat posting baru
 
-        # yarn
-        yarn create fuwari.
+```bash
+pnpm new-post your-post-name
+```
 
-        # pnpm
-        pnpm create fuwari@latest
-
-        # bun
-        bun create fuwari@latest
-
-        # deno
-        deno run -A npm:create-fuwari@latest
-        ```
-2. Untuk mengedit blog secara lokal, klon repositori kamu, jalankan `pnpm install` untuk instalasi dependensi.
-    - Install [pnpm](https://pnpm.io) `npm install -g pnpm` jika belum punya.
-3. Edit file konfigurasi `src/config.ts` untuk menyesuaikan blog.
-4. Jalankan `pnpm new-post <nama-file>` untuk membuat postingan baru dan edit di `src/content/posts/`.
-5. Deploy blog ke Vercel, Netlify, GitHub Pages, dll. sesuai [panduan](https://docs.astro.build/en/guides/deploy/). Jangan lupa edit konfigurasi situs di `astro.config.mjs` sebelum deploy.
-
-## 📝 Frontmatter Postingan
+Contoh Frontmatter:
 
 ```yaml
 ---
-title: Judul Postingan Pertama Saya
-published: 2023-09-09
-description: Ini adalah postingan pertama blog Astro saya.
-image: ./cover.jpg
-tags: [Foo, Bar]
-category: Front-end
+title: Post Baru
+published: 2026-03-22
+description: Ringkasan singkat
+image: ""
+tags: [catatan, matematika]
+category: Study
 draft: false
-lang: id   # Isi hanya jika bahasa postingan berbeda dari bahasa default di `config.ts`
+lang: zh_CN
 ---
 ```
 
-## 🧩 Markdown Sintaks Ekstensi
+## Cara publish
 
-Selain dukungan default Astro untuk [GitHub Flavored Markdown](https://github.github.com/gfm/), terdapat beberapa fitur tambahan:
+1. Jalankan `pnpm astro check && pnpm run build`
+2. Push ke branch `main`
+3. Tunggu GitHub Actions selesai deploy
 
-- Admonisi ([Pratinjau & Cara Pakai](https://fuwari.vercel.app/posts/markdown-extended/#admonitions))
-- Kartu repositori GitHub ([Pratinjau & Cara Pakai](https://fuwari.vercel.app/posts/markdown-extended/#github-repository-cards))
-- Kode blok ekspresif lewat Expressive Code ([Pratinjau](https://fuwari.vercel.app/posts/expressive-code/) / [Dokumentasi](https://expressive-code.com/))
+## Kredit
 
-## ⚡ Perintah
-
-Semua perintah dijalankan dari root proyek, via terminal:
-
-| Perintah                     | Aksi                                                      |
-|:-----------------------------|:----------------------------------------------------------|
-| `pnpm install`               | Instalasi dependensi                                      |
-| `pnpm dev`                   | Menjalankan server dev lokal di `localhost:4321`          |
-| `pnpm build`                 | Build untuk produksi ke folder `./dist/`                  |
-| `pnpm preview`               | Pratinjau hasil build sebelum deploy                      |
-| `pnpm check`                 | Cek error atau masalah di kode                            |
-| `pnpm format`                | Format kode dengan Biome                                  |
-| `pnpm new-post <nama-file>`  | Membuat postingan baru                                    |
-| `pnpm astro ...`             | Jalankan perintah CLI seperti `astro add`, `astro check`  |
-| `pnpm astro --help`          | Bantuan menggunakan Astro CLI                             |
-
-## ✏️ Kontribusi
-
-Lihat [Panduan Kontribusi](https://github.com/saicaca/fuwari/blob/main/CONTRIBUTING.md) untuk detail tentang cara berkontribusi ke proyek ini.
-
-## 📄 Lisensi
-
-Proyek ini dilisensikan di bawah MIT License.
-
----
-
-> Dokumentasi ini tersedia dalam Bahasa Indonesia. Untuk bahasa lain, lihat README di direktori docs.
+- Template asli: [saicaca/fuwari](https://github.com/saicaca/fuwari)
+- Repo ini sudah disesuaikan untuk penggunaan blog pribadi saya

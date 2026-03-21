@@ -1,82 +1,58 @@
-# 🍥Fuwari
+# Two의 블로그 저장소 (Fuwari 기반)
 
-[Astro](https://astro.build)로 구축된 정적 블로그 템플릿입니다.
+이 저장소는 [saicaca/fuwari](https://github.com/saicaca/fuwari)를 기반으로 만든 **개인 블로그 프로젝트**입니다.  
+이 문서는 원본 템플릿 README가 아니라, 내 저장소 운영 문서입니다.
 
-[**🖥️미리보기 (Vercel)**](https://fuwari.vercel.app)
+## 자주 수정하는 파일
 
-![Preview Image](https://raw.githubusercontent.com/saicaca/resource/main/fuwari/home.png)
+1. 사이트/프로필 설정: `src/config.ts`
+2. 게시글: `src/content/posts/`
+3. 배포 관련 설정: `astro.config.mjs`
+4. GitHub Pages 워크플로: `.github/workflows/deploy.yml`
 
-## ✨ 특징
+## 빠른 시작
 
-- [x] [Astro](https://astro.build) 및 [Tailwind CSS](https://tailwindcss.com)로 구축됨
-- [x] 부드러운 애니메이션 및 페이지 전환
-- [x] 라이트 모드 / 다크 모드
-- [x] 사용자 정의 가능한 테마 색상 및 배너
-- [x] 반응형 디자인
-- [x] [Pagefind](https://pagefind.app/)를 이용한 검색 기능
-- [x] [Markdown 확장 기능](https://github.com/saicaca/fuwari?tab=readme-ov-file#-markdown-extended-syntax)
-- [x] 목차
-- [x] RSS 피드
+```bash
+pnpm install
+pnpm dev
+```
 
-## 🚀 시작하기
-1. 블로그 저장소를 생성하세요:
-   - 이 템플릿에서 [새 저장소를 생성](https://github.com/saicaca/fuwari/generate)하거나 이 저장소를 포크하세요.
-   - 또는 다음 명령어 중 하나를 실행하세요:
-   ```sh
-       npm create fuwari@latest
-       yarn create fuwari
-       pnpm create fuwari@latest
-       bun create fuwari@latest
-       deno run -A npm:create-fuwari@latest
-   ```
-2. 로컬에서 블로그를 수정하려면, 저장소를 복제하고 `pnpm install`을 실행하여 종속성을 설치하세요.
-   - [pnpm](https://pnpm.io)이 설치되어 있지 않다면 `npm install -g pnpm`을 실행하여 설치하세요.
-3. `src/config.ts`설정 파일을 수정하여 블로그를 커스터마이징하세요.
-4. `pnpm new-post <filename>`을 실행하여 새 게시물을 만들고 `src/content/posts/`에서 수정하세요.
-5. [가이드](https://docs.astro.build/en/guides/deploy/)에 따라 블로그를 Vercel, Netlify, Github Pages 등에 배포하세요. 배포하기 전에 `astro.config.mjs`에서 사이트 구성을 수정해야 합니다.
+검사 및 빌드:
 
-## ⚙️ 게시물의 머리말 설정
+```bash
+pnpm astro check
+pnpm type-check
+pnpm run build
+```
+
+## 새 글 작성
+
+```bash
+pnpm new-post your-post-name
+```
+
+Frontmatter 예시:
 
 ```yaml
 ---
-title: 내 첫 블로그 게시물
-published: 2023-09-09
-description: 내 새로운 Astro 블로그의 첫 번째 게시물입니다!
-image: ./cover.jpg
-tags: [Foo, Bar]
-category: Front-end
+title: 새 글
+published: 2026-03-22
+description: 요약
+image: ""
+tags: [note, math]
+category: Study
 draft: false
-lang: jp      # 게시물의 언어가 `config.ts`의 사이트 언어와 다른 경우에만 설정합니다.
+lang: zh_CN
 ---
 ```
-## 🧩 마크다운 확장 구문
-Astro의 기본 [GitHub Flavored Markdown](https://github.github.com/gfm/) 지원 외에도 몇 가지 추가적인 마크다운 기능이 포함되어 있습니다.
-- Admonitions ([미리보기 및 사용법](https://fuwari.vercel.app/posts/markdown-extended/#admonitions))
-- GitHub 저장소 카드 ([미리보기 및 사용법](https://fuwari.vercel.app/posts/markdown-extended/#github-repository-cards))
-- Expressive Code를 사용한 향상된 코드 블록 ([미리보기](https://fuwari.vercel.app/posts/expressive-code/) / [문서](https://expressive-code.com/))
 
+## 배포 순서
 
+1. `pnpm astro check && pnpm run build`
+2. `main` 브랜치에 push
+3. GitHub Actions 배포 완료 확인
 
-## ⚡ 명령어
+## 참고
 
-모든 명령어는 프로젝트 최상단, 터미널에서 실행됩니다:
-
-| Command                             | Action                                           |
-|:------------------------------------|:-------------------------------------------------|
-| `pnpm install` | 종속성을 설치합니다.                            |
-| `pnpm dev`                          | `localhost:4321`에서 로컬 개발 서버를 시작합니다.      |
-| `pnpm build`                        | `./dist/`에 프로덕션 사이트를 구축합니다.         |
-| `pnpm check`                        | 코드에서 오류를 확인합니다.         |
-| `pnpm format`                        | Biome을 사용하여 코드를 포멧합니다.         |
-| `pnpm preview`                      | 배포하기 전에 로컬에서 빌드 미리보기     |
-| `pnpm new-post <filename>`          | 새 게시물 작성                                |
-| `pnpm astro ...`                    | `astro add`, `astro check`와 같은 CLI 명령어 실행 |
-| `pnpm astro --help`                 | Astro CLI를 사용하여 도움 받기                     |
-
-## ✏️ 기여
-이 프로젝트에 기여하는 방법에 대한 자세한 내용은 [기여 가이드](https://github.com/saicaca/fuwari/blob/main/CONTRIBUTING.md)를 확인하세요.
-
-## 📄 라이선스
-이 프로젝트는 MIT 라이선스에 따라 라이선스가 부여됩니다.
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsaicaca%2Ffuwari.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsaicaca%2Ffuwari?ref=badge_large&issueType=license)
+- 원본 템플릿: [saicaca/fuwari](https://github.com/saicaca/fuwari)
+- 이 저장소는 개인 운영 목적에 맞게 내용/설정을 변경했습니다

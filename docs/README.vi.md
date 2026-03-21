@@ -1,84 +1,58 @@
-# 🍥Fuwari  
+# Kho blog của Two (dựa trên Fuwari)
 
-Một mẫu blog tĩnh được xây bằng [Astro](https://astro.build).
+Đây là repo blog cá nhân của tôi, được tùy biến từ [saicaca/fuwari](https://github.com/saicaca/fuwari).  
+Tài liệu này mô tả cách vận hành repo của tôi, không phải README gốc của template.
 
-[**🖥️ Xem bản dùng thử (Vercel)**](https://fuwari.vercel.app)
+## Các file quan trọng
 
-![Hình ảnh xem trước](https://raw.githubusercontent.com/saicaca/resource/main/fuwari/home.png)
+1. Cấu hình site/profile: `src/config.ts`
+2. Bài viết: `src/content/posts/`
+3. Cấu hình deploy: `astro.config.mjs`
+4. Workflow GitHub Pages: `.github/workflows/deploy.yml`
 
-## ✨ Tính năng
+## Bắt đầu nhanh
 
-- [x] Được xây dựng bằng [Astro](https://astro.build) và [Tailwind CSS](https://tailwindcss.com)
-- [x] Có hoạt ảnh đổi chuyển trang mượt mà
-- [x] Chế độ sáng / tối
-- [x] Màu sắc và biểu ngữ có thể tùy chỉnh được
-- [x] Thiết kế nhanh nhạy
-- [x] Có chức năng tìm kiếm với [Pagefind](https://pagefind.app/)
-- [x] [Có các tính năng mở rộng của Markdown](https://github.com/saicaca/fuwari?tab=readme-ov-file#-markdown-extended-syntax)
-- [x] Có mục lục
-- [x] Nguồn cấp dữ liệu RSS
+```bash
+pnpm install
+pnpm dev
+```
 
-## 🚀 Bắt đầu
+Kiểm tra và build:
 
-1. Tạo kho lưu trữ blog của bạn:
-    - [Tạo một kho lưu trữ mới](https://github.com/saicaca/fuwari/generate) từ mẫu này hoặc fork kho lưu trữ này.
-    - Hoặc chạy một trong các lệnh sau:
-       ```sh
-       npm create fuwari@latest
-       yarn create fuwari
-       pnpm create fuwari@latest
-       bun create fuwari@latest
-       deno run -A npm:create-fuwari@latest
-       ```
-2. Để chỉnh sửa blog của bạn trên máy cục bộ, hãy clone kho lưu trữ của bạn, chạy lệnh `pnpm install` để cài đặt các phụ thuộc..
-    - Cài đặt [pnpm](https://pnpm.io) `npm install -g pnpm` nếu chưa có.
-3. Chỉnh sửa tệp cấu hình `src/config.ts` để tùy chỉnh blog của bạn.
-4. Chạy `pnpm new-post <filename>` để tạo một bài viết mới và chỉnh sửa nó trong `src/content/posts/`.
-5. Triển khai blog của bạn lên Vercel, Netlify, GitHub Pages, etc. theo [chỉ dẫn](https://docs.astro.build/en/guides/deploy/). Bạn cần chỉnh sửa cấu hình trang web trong `astro.config.mjs` trước khi triển khai.
+```bash
+pnpm astro check
+pnpm type-check
+pnpm run build
+```
 
-## 📝 Tiêu đề đầy đủ của bài viết
+## Tạo bài viết mới
+
+```bash
+pnpm new-post your-post-name
+```
+
+Ví dụ Frontmatter:
 
 ```yaml
 ---
-title: Blog đầu tiên của mình
-published: 2023-09-09
-description: Đây là bài viết đầu tiên vủa mình trên trang blog tạo bằng Astro này.
-image: ./cover.jpg
-tags: [Foo, Bar]
-category: Front-end
+title: Bài viết mới
+published: 2026-03-22
+description: Mô tả ngắn
+image: ""
+tags: [note, math]
+category: Study
 draft: false
-lang: jp      # Chỉ đặt nếu ngôn ngữ của bài viết khác với ngôn ngữ của trang web trong `config.ts`
+lang: zh_CN
 ---
 ```
 
-## 🧩 Cú pháp Markdown mở rộng
+## Quy trình publish
 
-Ngoài việc Astro đã có hỗ trợ mặc định cho [Markdown vị Github](https://github.github.com/gfm/), một số tính năng Markdown khác cũng đã được bổ sung:
+1. Chạy `pnpm astro check && pnpm run build`
+2. Push lên nhánh `main`
+3. Chờ GitHub Actions deploy xong
 
-- Chêm xen ([Xem trước và Cách sử dụng](https://fuwari.vercel.app/posts/markdown-extended/#admonitions))
-- Thẻ hiển thị kho lưu trữ GitHub ([Xem trước và Cách sử dụng](https://fuwari.vercel.app/posts/markdown-extended/#github-repository-cards))
-- Các khối mã nâng cao với Expressive Code ([Xem trước](https://fuwari.vercel.app/posts/expressive-code/) / [Tài liệu](https://expressive-code.com/))
+## Ghi công
 
-## ⚡ Lệnh
-
-Tất cả các lệnh được chạy từ thư mục gốc của dự án, từ một bảng điều khiển:
-
-| Lệnh                    | Mục đích                                              |
-|:---------------------------|:----------------------------------------------------|
-| `pnpm install`             | Cài đặt các phụ thuộc                               |
-| `pnpm dev`                 | Khởi động máy chủ cục bộ tại `localhost:4321`         |
-| `pnpm build`               | Xây dựng trang web của bạn vào `./dist/`             |
-| `pnpm preview`             | Xem trước bản web cục bộ của bạn, trước khi triển khai        |
-| `pnpm check`               | Chạy kiểm tra lỗi trong mã của bạn                 |
-| `pnpm format`              | Định dạng mã của bạn bằng Biome                       |
-| `pnpm new-post <filename>` | Tạo một bài viết mới                               |
-| `pnpm astro ...`           | Chạy các lệnh CLI như `astro add`, `astro check`    |
-| `pnpm astro --help`        | Nhận trợ giúp sử dụng Astro CLI                       |
-
-## ✏️ Đóng góp
-
-Xem [Hướng dẫn đóng góp](https://github.com/saicaca/fuwari/blob/main/CONTRIBUTING.md) để biết thêm chi tiết về cách đóng góp cho dự án này.
-
-## 📄 Giấy phép
-
-Dự án này đã được cấp Giấy phép MIT.
+- Template gốc: [saicaca/fuwari](https://github.com/saicaca/fuwari)
+- Repo này đã được cá nhân hóa về nội dung và cấu hình deploy
