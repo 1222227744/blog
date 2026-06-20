@@ -32,3 +32,6 @@ yarn.lock
 
 # cache
 .npm-cache/
+
+# local temp notes
+docs/tmp.md

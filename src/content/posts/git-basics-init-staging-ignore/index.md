@@ -263,7 +263,7 @@ git clean -fd
 *.log
 !important.log
 
-build/
+build/*
 !build/.gitkeep
 
 *.env
@@ -271,6 +271,8 @@ build/
 ```
 
 > **提示：** 规则生效后，最实用的排查命令是 `git check-ignore -v <path>`，它会告诉你到底是哪个规则命中的。
+
+这里的 `build/*` 比 `build/` 更适合配合 `!build/.gitkeep`。如果直接忽略整个目录，Git 会停止继续进入这个目录匹配后续规则，取消忽略里面的文件就容易失效。
 
 如果你确实想把一个被忽略的文件强制纳入版本控制，可以用：
 
@@ -329,13 +331,13 @@ git switch --track origin/feature/login
 
 ### 5.2 常见合并/整合方式对照
 
-| 方式 | 命令 | 是否改写已有历史 | 产物 | 适用场景 |
-| --- | --- | --- | --- | --- |
-| 快进合并（FF） | `git merge` | 否 | 只移动指针 | 主分支没产生新提交 |
-| 非快进合并（no-FF） | `git merge --no-ff` | 否 | 一个合并提交 | 想保留分支边界 |
-| 压缩合并（squash） | `git merge --squash` | 否 | 一个单独结果提交 | 只想保留结果，不保留分支内部提交 |
-| 变基（rebase） | `git rebase` | 是 | 复制并重放提交 | 整理个人分支 |
-| 挑拣提交（cherry-pick） | `git cherry-pick` | 是 | 挑出少量提交 | 热修复、回补到别的分支 |
+| 方式 | 命令 | 是否改写当前分支已有提交 | 是否保留分支结构 | 产物 | 适用场景 |
+| --- | --- | --- | --- | --- | --- |
+| 快进合并（FF） | `git merge` | 否 | 否 | 只移动分支指针 | 主分支没产生新提交 |
+| 非快进合并（no-FF） | `git merge --no-ff` | 否 | 是 | 一个合并提交 | 想保留分支边界 |
+| 压缩合并（squash） | `git merge --squash` | 否 | 否 | 一个普通提交 | 只想保留最终结果 |
+| 变基（rebase） | `git rebase` | 是 | 否 | 一串新提交 | 整理个人分支 |
+| 挑拣提交（cherry-pick） | `git cherry-pick` | 否 | 否 | 一个或多个新提交 | 热修复、回补到别的分支 |
 
 ```text
 例子：feature 上有 C 和 D，main 上有 A 和 B
@@ -359,6 +361,8 @@ A--B--C'
 ```
 
 > **提示：** 上面几个方式最大的区别，就是“是否保留原始分支结构”和“是否改写已有提交 SHA”。
+
+更准确地说，`cherry-pick` 会复制指定提交的改动并在当前分支上生成新提交，原来的提交不会被改写；`rebase` 才会把当前分支上的既有提交复制成新的提交，因此提交 SHA 会变化。
 
 ### 5.3 `git merge`：把一条开发线并回主线
 
@@ -465,6 +469,16 @@ git ls-files -u
 | 2 | ours，当前分支一侧 |
 | 3 | theirs，另一侧 |
 
+如果你想快速选择一边，可以用：
+
+```bash
+git restore --ours path/to/file
+git restore --theirs path/to/file
+git add path/to/file
+```
+
+> **注意：** `ours` / `theirs` 在 `merge` 里比较直观；但在 `rebase` 时会更绕。rebase 是把你的提交重放到新基底上，`ours` 往往指新基底一侧，`theirs` 才是正在被重放的提交一侧。冲突复杂时，先打开文件看内容，比直接套命令更稳。
+
 ### 6.3 冲突文件里到底是什么
 
 ```text
@@ -502,6 +516,17 @@ git ls-files -u
 | cherry-pick | `git add` 后 `git cherry-pick --continue` |
 | revert | `git add` 后 `git revert --continue` |
 | stash apply/pop | `git add` 后按需要继续；`pop` 成功后再检查 stash 是否还保留 |
+
+如果发现方向不对，可以中止当前操作：
+
+| 操作 | 中止或跳过 |
+| --- | --- |
+| merge | `git merge --abort` |
+| rebase | `git rebase --abort` 或 `git rebase --skip` |
+| cherry-pick | `git cherry-pick --abort` 或 `git cherry-pick --skip` |
+| revert | `git revert --abort` 或 `git revert --skip` |
+
+`--abort` 是回到操作前；`--skip` 是放弃当前这一个提交，继续处理后面的提交。`--skip` 常见于 rebase 或 cherry-pick 队列中某个提交已经不需要了。
 
 > **提示：** 如果你想让冲突更容易看清，可以把 `merge.conflictstyle` 设成 `zdiff3`，它会把共同祖先上下文也展示出来。
 
@@ -722,10 +747,12 @@ git restore --source=HEAD~1 --staged --worktree file.txt
 | 命令 | 作用 |
 | --- | --- |
 | `git restore file.txt` | 丢弃工作区修改 |
-| `git restore --staged file.txt` | 把文件从暂存区撤回到工作区 |
+| `git restore --staged file.txt` | 让暂存区里的这个文件恢复到 `HEAD` 的版本，工作区内容保留 |
 | `git restore --source=<commit> file.txt` | 从指定提交恢复内容 |
 
 `git restore` 不会移动 `HEAD`，所以它适合“只想撤文件，不想动历史”。
+
+换句话说，`git restore --staged file.txt` 不是把内容“搬回工作区”，而是取消这次暂存。文件在工作区里仍然保持你修改后的样子，只是不再属于下一次提交。
 
 ### 9.2 `git reset`：移动分支指针
 
@@ -767,11 +794,22 @@ git revert --abort
 
 `revert` 不改历史，而是追加一个“反向提交”。这就是为什么它特别适合公共分支。
 
+撤销合并提交时，`-m` 是 mainline 的意思，也就是告诉 Git “以哪个父提交作为主线”。一个 merge commit 至少有两个父提交：
+
+| 参数 | 含义 |
+| --- | --- |
+| `-m 1` | 保留第一个父提交一侧，撤销合并进来的另一侧改动 |
+| `-m 2` | 保留第二个父提交一侧，撤销第一侧带来的改动 |
+
+常见主分支上撤销功能分支合并，一般是 `git revert -m 1 <merge-commit-id>`，因为第一个父提交通常是主分支原来的历史。这个操作会留下“这个功能分支的改动已经被反向抵消”的历史痕迹；未来如果再合并同一个分支，Git 可能认为那些提交已经合并过。更稳的做法通常是从新分支重新提交需要恢复的改动。
+
 ### 9.4 `git stash`：临时收起当前工作
 
 ```bash
 git stash push -m "wip: temp notes"
 git stash push -p
+git stash push -u
+git stash push -a
 git stash push --keep-index
 git stash list
 git stash show -p stash@{0}
@@ -785,6 +823,10 @@ git stash branch temp-work stash@{0}
 | 命令 | 作用 |
 | --- | --- |
 | `push` | 把当前改动收进栈里 |
+| `push -u` | 同时收起未跟踪文件 |
+| `push -a` | 同时收起未跟踪文件和被忽略文件 |
+| `push -p` | 交互式选择要收起的改动 |
+| `push --keep-index` | 收起工作区中未暂存的部分，保留暂存区 |
 | `list` | 查看 stash 列表 |
 | `show -p` | 看 stash 里面改了什么 |
 | `apply` | 恢复但不删除 stash |
@@ -800,6 +842,10 @@ git stash branch temp-work stash@{0}
 - 再 `pop` 或 `apply`
 
 如果恢复时冲突，处理方式和 merge 类似：解决文件、`git add`、再继续后续步骤。
+
+默认 `git stash push` 只会收起已跟踪文件的改动，不会收未跟踪文件。临时新建的文件也要收起来时，用 `-u`；连 `.gitignore` 忽略的产物都要收起来时，用 `-a`，但这个很少需要。
+
+`--keep-index` 的一个典型用法是：你已经用 `git add -p` 暂存了准备提交的干净部分，但工作区里还有别的半成品。此时可以 `git stash push --keep-index`，先只测试和提交暂存区里的内容，之后再 `git stash pop` 把半成品拿回来。
 
 ### 9.5 `git reflog`：最后的后悔药
 
@@ -898,6 +944,192 @@ git bisect run pnpm test
 
 hooks 默认放在 `.git/hooks`，但那里的脚本通常不会被仓库版本化。团队如果要共享 hooks，常见做法是设置 `core.hooksPath` 指向一个可提交目录。
 
+### 10.5 `git worktree`：同一个仓库同时开多个工作区
+
+`worktree` 很适合“当前分支写到一半，又要马上切去修另一个 bug”的情况。它不会强迫你 stash 当前工作，而是在同一个仓库历史上额外挂一个工作目录。
+
+```bash
+git worktree list
+git worktree add ../repo-hotfix main
+git worktree add -b hotfix/login ../repo-hotfix origin/main
+git worktree remove ../repo-hotfix
+git worktree prune
+```
+
+| 命令 | 作用 |
+| --- | --- |
+| `git worktree list` | 查看所有工作区 |
+| `git worktree add <path> <branch>` | 在指定路径检出一个分支 |
+| `git worktree add -b <new> <path> <start>` | 从某个起点创建新分支并检出 |
+| `git worktree remove <path>` | 删除额外工作区 |
+| `git worktree prune` | 清理已经不存在的工作区记录 |
+
+和 `stash` 的区别：
+
+| 场景 | 更适合 |
+| --- | --- |
+| 临时收起一点改动，马上回来 | `git stash` |
+| 要同时保留两个独立工作目录 | `git worktree` |
+| 修 bug 的同时原分支还要保留编辑器状态 | `git worktree` |
+
+> **注意：** 同一个本地分支通常不能被两个 worktree 同时检出。需要并行开发时，给另一个 worktree 新建分支更清楚。
+
+### 10.6 `git rerere`：记住你解决过的冲突
+
+`rerere` 是 reuse recorded resolution 的缩写。它会记录你怎么解决过某类冲突，下次遇到相同冲突时自动套用之前的解决结果。
+
+```bash
+git config --global rerere.enabled true
+git rerere status
+git rerere diff
+git rerere forget path/to/file
+git rerere gc
+```
+
+| 命令 | 作用 |
+| --- | --- |
+| `rerere.enabled=true` | 开启冲突解决记录 |
+| `git rerere status` | 查看当前哪些文件被 rerere 记录 |
+| `git rerere diff` | 查看 rerere 套用的解决结果 |
+| `git rerere forget <path>` | 忘掉某个文件的记录 |
+| `git rerere gc` | 清理过期记录 |
+
+它特别适合长期功能分支反复 rebase、或者维护多个发布分支时重复解决同一类冲突。第一次还是要你手动解决，后续才会复用。
+
+### 10.7 `git grep`：在仓库里查内容
+
+`git grep` 只查 Git 认识的文件，速度快，也不会默认扫进 `node_modules`、构建产物这类噪音。
+
+```bash
+git grep "TODO"
+git grep -n "useEffect"
+git grep -i "login"
+git grep -l "fetchUser"
+git grep "oldName" -- "*.ts" "*.tsx"
+git grep "api" HEAD~3
+```
+
+| 参数 | 作用 |
+| --- | --- |
+| `-n` | 显示行号 |
+| `-i` | 忽略大小写 |
+| `-l` | 只列文件名 |
+| `-- <pathspec>` | 限定路径或文件类型 |
+| `<revision>` | 在某个提交或分支里搜索 |
+
+如果只是查当前仓库代码，`git grep` 经常比普通 `grep` 更少噪音；如果要查未跟踪文件，还是用编辑器搜索或 `rg` 更合适。
+
+### 10.8 `git commit --fixup` 和 `git rebase --autosquash`
+
+当你在 code review 后要修前面某个提交，`fixup` 比“新建一个 fix typo 提交，最后手动 squash”更顺。
+
+```bash
+git log --oneline
+git commit --fixup <commit-id>
+git rebase -i --autosquash <base>
+```
+
+流程是：
+
+1. 找到要修正的目标提交 ID
+2. 修改代码并 `git add`
+3. `git commit --fixup <commit-id>`
+4. `git rebase -i --autosquash <base>`
+5. Git 会自动把 fixup 提交排到目标提交后面，并标成 `fixup`
+
+常见例子：
+
+```bash
+git commit --fixup abc1234
+git rebase -i --autosquash origin/main
+```
+
+> **提示：** 这个功能适合整理个人分支提交。和普通 rebase 一样，如果分支已经被别人依赖，要先沟通再改写历史。
+
+### 10.9 `git range-diff`：比较两组提交
+
+`range-diff` 很适合看“我 rebase 前后的提交系列到底变了什么”。普通 `diff` 更关注最终文件差异，`range-diff` 更关注提交序列之间的对应关系。
+
+```bash
+git range-diff origin/main..feature-old origin/main..feature-new
+git range-diff main@{1}..feature main..feature
+```
+
+| 场景 | 用法 |
+| --- | --- |
+| rebase 后自查提交变化 | `git range-diff old-base..old-tip new-base..new-tip` |
+| review 一组补丁是否只是整理过 | 比较旧分支范围和新分支范围 |
+| 检查 fixup/squash 后有没有丢内容 | 和 rebase 前的范围对比 |
+
+它的输出会按提交配对，告诉你哪些提交相同、哪些被重写、哪些新增或删除。写复杂 PR 时，这个命令比单纯看最终 diff 更能发现“整理历史时漏了提交”的问题。
+
+### 10.10 `git describe`：从 tag 推导版本号
+
+`describe` 会从当前提交往回找最近的 tag，并生成一个可读版本描述。
+
+```bash
+git describe --tags
+git describe --tags --always
+git describe --tags --dirty
+```
+
+输出可能像这样：
+
+```text
+v1.2.0-5-gabc1234
+```
+
+含义是：当前提交距离 `v1.2.0` 这个 tag 之后有 5 个提交，当前短 SHA 是 `abc1234`。
+
+| 参数 | 作用 |
+| --- | --- |
+| `--tags` | 使用轻量 tag 和 annotated tag |
+| `--always` | 没有 tag 时退回到短 SHA |
+| `--dirty` | 工作区不干净时追加 dirty 标记 |
+
+这个命令很适合放进构建脚本里生成版本号，比如 CLI 的 `--version`、前端页面的构建信息、后端服务的启动日志。
+
+### 10.11 `git sparse-checkout`：大仓库只检出一部分
+
+大仓库里你只需要某几个目录时，可以用 sparse checkout 减少工作区体积。
+
+```bash
+git clone --filter=blob:none --sparse <repository-url>
+cd repo
+git sparse-checkout set frontend docs
+git sparse-checkout list
+git sparse-checkout add scripts
+git sparse-checkout disable
+```
+
+| 命令 | 作用 |
+| --- | --- |
+| `--sparse` | 克隆后启用稀疏检出 |
+| `set <paths>` | 设置只检出的目录或文件 |
+| `add <paths>` | 在现有范围上追加 |
+| `list` | 查看当前规则 |
+| `disable` | 恢复完整工作区 |
+
+它适合 monorepo 或超大项目。注意它改变的是工作区可见文件，不代表仓库历史不存在；需要和构建脚本、IDE 配置配合好。
+
+### 10.12 `git archive`：导出干净源码包
+
+`archive` 可以从某个提交、分支或 tag 导出一份不带 `.git` 目录的源码包。
+
+```bash
+git archive --format=zip --output=release.zip HEAD
+git archive --format=tar --prefix=myapp/ v1.0.0 > myapp.tar
+```
+
+| 参数 | 作用 |
+| --- | --- |
+| `--format=zip` | 导出 zip |
+| `--format=tar` | 导出 tar |
+| `--output=<file>` | 指定输出文件 |
+| `--prefix=<dir>/` | 给压缩包内容加一层目录 |
+
+它适合发源码包、交作业、给别人一份干净快照。它不会包含未提交文件，也不会包含 `.git` 历史。
+
 <a id="git-cheatsheet"></a>
 ## 11. 速查表
 
@@ -918,6 +1150,14 @@ hooks 默认放在 `.git/hooks`，但那里的脚本通常不会被仓库版本�
 | 同步远程但不改当前分支 | `git fetch` |
 | 同步并整合上游 | `git pull` |
 | 推送本地历史 | `git push` |
+| 同时开两个工作目录 | `git worktree` |
+| 复用冲突解决结果 | `git rerere` |
+| 在仓库中搜索内容 | `git grep` |
+| 自动整理修补提交 | `git commit --fixup` + `git rebase --autosquash` |
+| 比较两组提交 | `git range-diff` |
+| 从 tag 推导版本号 | `git describe` |
+| 大仓库只检出部分目录 | `git sparse-checkout` |
+| 导出干净源码包 | `git archive` |
 
 ### 11.2 如果你只记三件事
 
