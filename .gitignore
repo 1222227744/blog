@@ -32,6 +32,7 @@ yarn.lock
 
 # cache
 .npm-cache/
+.pnpm-store/
 
 # local temp notes
 docs/tmp.md

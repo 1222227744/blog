@@ -2,14 +2,11 @@
 title: 这是一个简单的小引导（？）
 published: 2026-03-20
 description: "点进来更神！"
-image: "./cover.jpg"
 tags: ["测试向", "博客", "分享"]
 category: 指引
 draft: false
 ---
-> Cover image source: [Source](https://www.miyoushe.com/zzz/article/69603606)
-
-这个博客模板是我从[Github](github.com)上clone下来的，[原作者在此](https://github.com/saicaca)
+本站基于 [saicaca 的 Fuwari 模板](https://github.com/saicaca/fuwari) 搭建。下方文章配置示例与字段说明改编自 Fuwari 的示例文章，相关模板内容遵循 MIT 许可，完整文本见页脚的 Licenses。
 
 ## Front-matter of Posts
 

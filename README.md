@@ -102,6 +102,9 @@ Before deploying, confirm:
 
 ## License
 
-This repository follows the existing project license:
+The Fuwari template code is used under the [MIT License](LICENSE). The deployed
+site includes the full text and [third-party notices](THIRD_PARTY_NOTICES.txt).
 
-- [LICENSE](LICENSE)
+The CC BY-NC-SA 4.0 label on posts applies to original article content that the
+blog author has the right to license. Template excerpts, third-party assets,
+icons, and fonts follow their own terms.
